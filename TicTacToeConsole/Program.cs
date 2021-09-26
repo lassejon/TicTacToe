@@ -1,19 +1,13 @@
-﻿using System;
-using Microsoft.VisualBasic;
-using Model;
+﻿using View;
 
 namespace TicTacToeConsole
 {
-    class Program
+    static class Program
     {
-        static void Main(string[] args)
+        private static void Main()
         {
-            var board = new Board();
-            board.SetPiece("O", 0, 2);
-            board.SetPiece("X", 1, 1);
-            Console.WriteLine(board.SetPiece("O", 1, 1));
-
-            Console.WriteLine(board);
+            var game = new Game();
+            game.PlayGame();
         }
     }
 }

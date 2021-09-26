@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
 
 namespace Model
@@ -26,13 +25,13 @@ namespace Model
             return true;
         }
 
-        private bool IsValidPosition(int posX, int posY)
+        public bool IsValidPosition(int posX, int posY)
         {
-            var maxPos = Rows.GetLength(0);
+            var maxPos = Rows.GetLength(0) - 1;
             var minPos = 0;
-            var positionsInsideBoard = (posX < maxPos && posY < maxPos) && (posX < minPos && posY < minPos);
+            var positionsInsideBoard = (posX <= maxPos && posY <= maxPos) && (posX >= minPos && posY >= minPos);
             
-            return Rows[posX, posY] is null && positionsInsideBoard;
+            return positionsInsideBoard && Rows[posX, posY] is null;
         }
 
         public void ResetGame()
@@ -44,31 +43,18 @@ namespace Model
         public bool IsGameOver(string piece, int posX, int posY)
         {
             if (CountBoardPieces < MaxPieces)
-                return CheckRowForWin(piece, posY) && CheckColumnForWin(piece, posX) &&
-                       CheckDiagonalForWin(piece, posX, posY);
+            {
+                return CheckRowForWin(piece, posX) || CheckColumnForWin(piece, posY) ||
+                       CheckDiagonalForWin(piece) || CheckOtherDiagonalForWin(piece);
+            }
+
             Console.WriteLine();
             Console.WriteLine("Game is draw!");
             return true;
 
         }
 
-        private bool CheckColumnForWin(string piece, int posX)
-        {
-            for (var i = 0; i < Size; i++)
-            {
-                if (piece != Rows[posX, i])
-                {
-                    return false;
-                }
-            }
-            
-            Console.WriteLine();
-            Console.WriteLine($"{piece} wins BIG TIME!!!!!!!");
-
-            return true;
-        }
-
-        private bool CheckRowForWin(string piece, int posY)
+        private bool CheckColumnForWin(string piece, int posY)
         {
             for (var i = 0; i < Size; i++)
             {
@@ -77,6 +63,22 @@ namespace Model
                     return false;
                 }
             }
+            
+            Console.WriteLine();
+            Console.WriteLine($"{piece} wins BIG TIME!!!!!!!");
+
+            return true;
+        }
+
+        private bool CheckRowForWin(string piece, int posX)
+        {
+            for (var i = 0; i < Size; i++)
+            {
+                if (piece != Rows[posX, i])
+                {
+                    return false;
+                }
+            }
 
             Console.WriteLine();
             Console.WriteLine($"{piece} wins BIG TIME!!!!!!!");
@@ -84,9 +86,8 @@ namespace Model
             return true;
         }
 
-        private bool CheckDiagonalForWin(string piece, int posX, int posY)
+        private bool CheckDiagonalForWin(string piece)
         {
-            if (posX != posY) return true;
             for (var i = 0; i < Size; i++)
             {
                 if (piece != Rows[i, i])
@@ -94,14 +95,6 @@ namespace Model
                     return false;
                 }
             }
-
-            for (var i = 0; i < Size; i++)
-            {
-                if (piece != Rows[i, (Size - 1) - i])
-                {
-                    return false;
-                }
-            }
             
             Console.WriteLine();
             Console.WriteLine($"{piece} wins BIG TIME!!!!!!!");
@@ -109,7 +102,22 @@ namespace Model
             return true;
         }
 
+        private bool CheckOtherDiagonalForWin(string piece)
+        {
+            for (var i = 0; i < Size; i++)
+            {
+                if (piece != Rows[i, (Size - 1) - i])
+                {
+                    return false;
+                }
+            }
 
+            Console.WriteLine();
+            Console.WriteLine($"{piece} wins BIG TIME!!!!!!!");
+
+            return true;
+        }
+        
         public override string ToString()
         {
             StringBuilder sb = new();
@@ -119,7 +127,7 @@ namespace Model
                 sb.Append("|");
                 for (var j = 0; j < Rows.GetLength(1); j++) 
                 {
-                    sb.Append(Rows[i, j].ToString() ?? " ");
+                    sb.Append(Rows[i, j] ?? " ");
                     sb.Append("|");
                 }
                 sb.Append(i != Rows.GetLength(1) - 1 ? "\n" : "");
