@@ -54,7 +54,7 @@ namespace Model
 
         }
 
-        private bool CheckColumnForWin(string piece, int posY)
+        public bool CheckColumnForWin(string piece, int posY)
         {
             for (var i = 0; i < Size; i++)
             {
@@ -70,7 +70,7 @@ namespace Model
             return true;
         }
 
-        private bool CheckRowForWin(string piece, int posX)
+        public bool CheckRowForWin(string piece, int posX)
         {
             for (var i = 0; i < Size; i++)
             {
@@ -86,7 +86,7 @@ namespace Model
             return true;
         }
 
-        private bool CheckDiagonalForWin(string piece)
+        public bool CheckDiagonalForWin(string piece)
         {
             for (var i = 0; i < Size; i++)
             {
@@ -102,7 +102,7 @@ namespace Model
             return true;
         }
 
-        private bool CheckOtherDiagonalForWin(string piece)
+        public bool CheckOtherDiagonalForWin(string piece)
         {
             for (var i = 0; i < Size; i++)
             {
